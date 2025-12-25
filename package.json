@@ -1,0 +1,25 @@
+{
+  "name": "worldforger-e2e",
+  "version": "1.0.0",
+  "description": "End-to-end tests for WorldForger API and Client",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "test:codegen": "playwright codegen",
+    "test:ci": "playwright test --reporter=github,html",
+    "install:browsers": "playwright install --with-deps chromium firefox"
+  },
+  "keywords": ["e2e", "testing", "playwright", "worldforger"],
+  "author": "Daniel Strom",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.3",
+    "dotenv": "^17.2.3",
+    "typescript": "^5.9.3"
+  }
+}
