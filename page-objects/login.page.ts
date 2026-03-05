@@ -23,7 +23,7 @@ export class LoginPage extends BasePage {
     await this.submitButton.click();
   }
 
-  async expectErrorMessage(message: string): Promise<void> {
+  async expectErrorMessage(message: string | RegExp): Promise<void> {
     await expect(this.errorMessage).toContainText(message);
   }
 

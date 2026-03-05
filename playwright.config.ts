@@ -14,30 +14,48 @@ export default defineConfig({
     : [['html', { open: 'on-failure' }]],
 
   use: {
-    baseURL: process.env.CLIENT_URL || 'http://localhost:5173',
+    baseURL: process.env.API_URL || 'http://localhost:4000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
   },
 
   projects: [
+    // Auth setup - runs once, saves session
+    {
+      name: 'setup',
+      testMatch: /global\.setup\.ts/,
+    },
+    // Unauthenticated tests - no login required
+    {
+      name: 'logged-out',
+      testMatch: /\.logged-out\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    // Authenticated tests
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      testIgnore: [/global\.setup\.ts/, /\.logged-out\.spec\.ts/],
+      use: { ...devices['Desktop Chrome'], storageState: '.auth/user.json' },
+      dependencies: ['setup'],
     },
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      testIgnore: [/global\.setup\.ts/, /\.logged-out\.spec\.ts/],
+      use: { ...devices['Desktop Firefox'], storageState: '.auth/user.json' },
+      dependencies: ['setup'],
     },
     {
       name: 'mobile-chrome',
-      use: { ...devices['Pixel 5'] },
+      testIgnore: [/global\.setup\.ts/, /\.logged-out\.spec\.ts/],
+      use: { ...devices['Pixel 5'], storageState: '.auth/user.json' },
+      dependencies: ['setup'],
     },
   ],
 
   webServer: process.env.CI ? undefined : {
     command: 'echo "Start your dev server manually"',
-    url: process.env.CLIENT_URL || 'http://localhost:5173',
+    url: process.env.API_URL || 'http://localhost:4000',
     reuseExistingServer: true,
     timeout: 120 * 1000,
   },
